@@ -1,2 +1,3 @@
-# d.buzz-search
-Express search api for https://hivesearcher.com/
+# express-js-starter
+
+Express API Structure
