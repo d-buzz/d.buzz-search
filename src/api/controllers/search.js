@@ -27,7 +27,8 @@ const searchPostByTags = async (req, res) => {
   const tag = req.body.tag
   const body = { q: `${tag} tag:${tag} ${categoryParam}`, ...searchSort }
   const apiKey = apiKeys[randomIndex(0, 1)]
-  baseRequest = baseRequest.headers.Authorization = apiKey
+  baseRequest.headers.Authorization = apiKey
+
   const request = {
     ...baseRequest,
     body: JSON.stringify(body),
@@ -43,7 +44,7 @@ const searchPostByQueryString = async (req, res) => {
   const tag = req.body.query
   const body = { q: `${tag} ${categoryParam}`, ...searchSort }
   const apiKey = apiKeys[randomIndex(0, 1)]
-  baseRequest = baseRequest.headers.Authorization = apiKey
+  baseRequest.headers.Authorization = apiKey
   const request = {
     ...baseRequest,
     body: JSON.stringify(body),
