@@ -4,11 +4,7 @@ const searchSort = { sort: "popularity" }
 const searchApiKey = 'K1GJEM2XVI4LISLEZAYREFH7JDOCFMDFIDSHN62EUHD6SLASLDHFDEQ25SRV'
 const fetch = require('node-fetch')
 
-const apiKeys = [
-  'K1GJEM2XVI4LISLEZAYREFH7JDOCFMDFIDSHN62EUHD6SLASLDHFDEQ25SRV',
-  'PHTO8LRTIH7HECN0WRTJYOH2P584UDI0G1CE0QAEV4YRFZOZJVFIXQD46AFJ',
-  'IOO2IQLZGNFMPAFWYTRU7JBIJHORLUIDS0JM0POGYV4NBPGFWXRYDWH6P1U4'
-]
+const apiKeys = [ 'GSNWYJWHGJH1Y2YXNDOJENUJYTQSYCW8C1X7HW36NXUXW7GFGLLTOQTPZ4JB' ]
 
 let baseRequest = {
   method: 'POST',
@@ -27,13 +23,34 @@ const randomIndex = (minimum, maximum) => {
 const searchPostByTags = async (req, res) => {
   const tag = req.body.tag
   const body = { q: `${tag} tag:${tag} ${categoryParam}`, ...searchSort }
-  const apiKey = apiKeys[randomIndex(0, 1)]
+  const apiKey = apiKeys[0]
   baseRequest.headers.Authorization = apiKey
 
   const request = {
     ...baseRequest,
     body: JSON.stringify(body),
   }
+
+  console.log({ request })
+
+  const data = await fetch(searchUrl, request)
+  const dataJSON = await data.json()
+
+  res.json(dataJSON)
+}
+
+const searchPostByAuthor = async (req, res) => {
+  const author = req.body.author
+  const body = { q: `${author} author:${author} ${categoryParam}`, ...searchSort }
+  const apiKey = apiKeys[0]
+  baseRequest.headers.Authorization = apiKey
+
+  const request = {
+    ...baseRequest,
+    body: JSON.stringify(body),
+  }
+
+  console.log({ request })
 
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
@@ -44,7 +61,7 @@ const searchPostByTags = async (req, res) => {
 const searchPostByQueryString = async (req, res) => {
   const tag = req.body.query
   const body = { q: `${tag} ${categoryParam}`, ...searchSort }
-  const apiKey = apiKeys[randomIndex(0, 1)]
+  const apiKey = apiKeys[0]
   baseRequest.headers.Authorization = apiKey
   const request = {
     ...baseRequest,
@@ -57,4 +74,4 @@ const searchPostByQueryString = async (req, res) => {
   res.json(dataJSON)
 }
 
-module.exports = { searchPostByTags, searchPostByQueryString }
+module.exports = { searchPostByTags, searchPostByQueryString, searchPostByAuthor }
