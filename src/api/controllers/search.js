@@ -36,12 +36,14 @@ const searchPostByTags = async (req, res) => {
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
 
+  console.log({ dataJSON })
+
   res.json(dataJSON)
 }
 
 const searchPostByAuthor = async (req, res) => {
   const author = req.body.author
-  const body = { q: `${author} author:${author} ${categoryParam}`, ...searchSort }
+  const body = { q: `* author:${author} ${categoryParam}`, ...searchSort }
   const apiKey = apiKeys[0]
   baseRequest.headers.Authorization = apiKey
 
@@ -49,8 +51,6 @@ const searchPostByAuthor = async (req, res) => {
     ...baseRequest,
     body: JSON.stringify(body),
   }
-
-  console.log({ request })
 
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
