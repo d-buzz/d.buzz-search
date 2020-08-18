@@ -4,7 +4,7 @@ const searchSort = { sort: "popularity" }
 const searchApiKey = 'K1GJEM2XVI4LISLEZAYREFH7JDOCFMDFIDSHN62EUHD6SLASLDHFDEQ25SRV'
 const fetch = require('node-fetch')
 
-const apiKeys = [ 'GSNWYJWHGJH1Y2YXNDOJENUJYTQSYCW8C1X7HW36NXUXW7GFGLLTOQTPZ4JB' ]
+const apiKeys = [ 'JVUZH2EWXVJG7IUZBJGIXQYWCFSBANHQHYHLO4ZMJYHORYWJTFZKITKVGXXL' ]
 
 let baseRequest = {
   method: 'POST',
@@ -22,7 +22,7 @@ const randomIndex = (minimum, maximum) => {
 
 const searchPostByTags = async (req, res) => {
   const tag = req.body.tag
-  const body = { q: `${tag} tag:${tag} ${categoryParam}`, ...searchSort }
+  const body = { q: `* tag:${tag} ${categoryParam}`, ...searchSort }
   const apiKey = apiKeys[0]
   baseRequest.headers.Authorization = apiKey
 
