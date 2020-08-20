@@ -4,7 +4,7 @@ const searchSort = { sort: "popularity" }
 const searchApiKey = 'K1GJEM2XVI4LISLEZAYREFH7JDOCFMDFIDSHN62EUHD6SLASLDHFDEQ25SRV'
 const fetch = require('node-fetch')
 
-const apiKeys = [ 'JVUZH2EWXVJG7IUZBJGIXQYWCFSBANHQHYHLO4ZMJYHORYWJTFZKITKVGXXL' ]
+const apiKeys = ['ISMIUIZGZFPYKA9O1MRJYBKT2OZJHMPFDSBN88GATYXYOIIODHT3JOAPTG9A']
 
 let baseRequest = {
   method: 'POST',
@@ -36,7 +36,15 @@ const searchPostByTags = async (req, res) => {
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
 
-  console.log({ dataJSON })
+
+  console.log({
+    type: 'tags',
+    stats: {
+      took: dataJSON.took,
+      hits: dataJSON.hits,
+    },
+    message: dataJSON.message,
+  })
 
   res.json(dataJSON)
 }
@@ -55,12 +63,21 @@ const searchPostByAuthor = async (req, res) => {
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
 
+  console.log({
+    type: 'author',
+    stats: {
+      took: dataJSON.took,
+      hits: dataJSON.hits,
+    },
+    message: dataJSON.message,
+  })
+
   res.json(dataJSON)
 }
 
 const searchPostByQueryString = async (req, res) => {
-  const tag = req.body.query
-  const body = { q: `${tag} ${categoryParam}`, ...searchSort }
+  const query = req.body.query
+  const body = { q: `${query} ${categoryParam}`, ...searchSort }
   const apiKey = apiKeys[0]
   baseRequest.headers.Authorization = apiKey
   const request = {
@@ -71,6 +88,15 @@ const searchPostByQueryString = async (req, res) => {
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
 
+  console.log({
+    type: 'general',
+    stats: {
+      took: dataJSON.took,
+      hits: dataJSON.hits,
+    },
+    message: dataJSON.message,
+  })
+  
   res.json(dataJSON)
 }
 
