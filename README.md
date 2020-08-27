@@ -1,3 +1,3 @@
-# express-js-starter
+# Hive Searcher Wrapper
 
-Express API Structure
+Wraps hive searcher for d.buzz searches
