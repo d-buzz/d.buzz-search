@@ -1,10 +1,10 @@
 const searchUrl = 'https://api.search.esteem.app/search'
 const categoryParam = 'category:hive-193084'
-const searchSort = { sort: "popularity" }
-const searchApiKey = 'K1GJEM2XVI4LISLEZAYREFH7JDOCFMDFIDSHN62EUHD6SLASLDHFDEQ25SRV'
+const searchSort = { sort: "newest" }
+const searchApiKey = 'XSXZDU91DDXWS6MVKMFUD25N79XCVZL3FFMP9JLONV5AQAGWPSDMBTEFOYU8  '
 const fetch = require('node-fetch')
 
-const apiKeys = ['RBBZZW3V9HEST44EC3K39B7RAERR0GN4O8LDNUAALR9QRKU7AP9CRJ5LJ8CD']
+// const apiKeys = ['1DOGSLBZRPKCDE0AU6AENLFIMX2DI5E1A9DFJLD8GJTFP1ZTSTAFVKWJNHFS']
 
 let baseRequest = {
   method: 'POST',
@@ -23,7 +23,7 @@ const randomIndex = (minimum, maximum) => {
 const searchPostByTags = async (req, res) => {
   const tag = req.body.tag
   const body = { q: `* tag:${tag} ${categoryParam}`, ...searchSort }
-  const apiKey = apiKeys[0]
+  const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
 
   const request = {
@@ -52,7 +52,7 @@ const searchPostByTags = async (req, res) => {
 const searchPostByAuthor = async (req, res) => {
   const author = req.body.author
   const body = { q: `* author:${author} ${categoryParam}`, ...searchSort }
-  const apiKey = apiKeys[0]
+  const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
 
   const request = {
@@ -78,7 +78,7 @@ const searchPostByAuthor = async (req, res) => {
 const searchPostByQueryString = async (req, res) => {
   const query = req.body.query
   const body = { q: `${query} ${categoryParam}`, ...searchSort }
-  const apiKey = apiKeys[0]
+  const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
   const request = {
     ...baseRequest,
@@ -100,4 +100,39 @@ const searchPostByQueryString = async (req, res) => {
   res.json(dataJSON)
 }
 
-module.exports = { searchPostByTags, searchPostByQueryString, searchPostByAuthor }
+
+const searchAccountReplies = async (req, res) => {
+
+  console.log({ body: req.body })
+
+  const account = req.body.account
+  const body = { q: `* author:${account} ${categoryParam}`, ...searchSort, type: 'comment' }
+  const apiKey = searchApiKey
+  baseRequest.headers.Authorization = apiKey
+
+  const request = {
+    ...baseRequest,
+    body: JSON.stringify(body),
+  }
+
+  const data = await fetch(searchUrl, request)
+  const dataJSON = await data.json()
+
+  console.log({
+    type: 'replies',
+    stats: {
+      took: dataJSON.took,
+      hits: dataJSON.hits,
+    },
+    message: dataJSON.message,
+  })
+  
+  res.json(dataJSON)
+}
+
+module.exports = { 
+  searchPostByTags,
+  searchPostByQueryString,
+  searchPostByAuthor,
+  searchAccountReplies
+}
