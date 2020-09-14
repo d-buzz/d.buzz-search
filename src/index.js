@@ -3,6 +3,7 @@ const api = require('./api')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const config = require('./config');
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -15,4 +16,4 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1', api)
-app.listen(3030, () => console.log('server running on port 3030'))
+app.listen(config.port, () => console.log('server running on port '+config.port))
