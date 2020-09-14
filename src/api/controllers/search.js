@@ -6,8 +6,6 @@ const categoryParam = 'category:'+config.primary_tag
 const searchSort = config.search_sort
 const searchApiKey = config.search_api_key
 
-// const apiKeys = ['1DOGSLBZRPKCDE0AU6AENLFIMX2DI5E1A9DFJLD8GJTFP1ZTSTAFVKWJNHFS']
-
 let baseRequest = {
   method: 'POST',
   headers: {
@@ -59,7 +57,7 @@ const searchPostByTags = async (req, res) => {
   const q = `tag:${tag}`;
 
   const result = await mainSearchByType('tags',q, otherParams);
-  res.json(result); 
+  return res.json(result); 
 }
 
 const searchPostByAuthor = async (req, res) => {
@@ -70,7 +68,7 @@ const searchPostByAuthor = async (req, res) => {
   const q = `author:${author}`;
 
   const result = await mainSearchByType('author',q, otherParams);
-  res.json(result); 
+  return res.json(result); 
 }
 
 const searchPostByQueryString = async (req, res) => {
@@ -81,7 +79,7 @@ const searchPostByQueryString = async (req, res) => {
   const q = `${query}`;
 
   const result = await mainSearchByType('general',q, otherParams);
-  res.json(result); 
+  return res.json(result); 
 }
 
 
@@ -93,7 +91,7 @@ const searchAccountReplies = async (req, res) => {
   const q = `author:${account} type:comment`;
 
   const result = await mainSearchByType('replies',q, otherParams);
-  res.json(result); 
+  return res.json(result); 
 }
 
 module.exports = { 
