@@ -1,10 +1,10 @@
-const searchUrl = 'https://api.search.esteem.app/search'
-const categoryParam = 'category:hive-193084'
-const searchSort = { sort: "newest" }
-const searchApiKey = 'XSXZDU91DDXWS6MVKMFUD25N79XCVZL3FFMP9JLONV5AQAGWPSDMBTEFOYU8  '
+const config = require('../../config');
 const fetch = require('node-fetch')
 
-// const apiKeys = ['1DOGSLBZRPKCDE0AU6AENLFIMX2DI5E1A9DFJLD8GJTFP1ZTSTAFVKWJNHFS']
+const searchUrl = config.search_url
+const categoryParam = 'category:'+config.primary_tag
+const searchSort = config.search_sort
+const searchApiKey = config.search_api_key
 
 let baseRequest = {
   method: 'POST',
@@ -20,12 +20,11 @@ const randomIndex = (minimum, maximum) => {
   return Math.round( Math.random() * (maximum - minimum) + minimum);
 }
 
-const searchPostByTags = async (req, res) => {
-  const tag = req.body.tag
-  const body = { q: `* tag:${tag} ${categoryParam}`, ...searchSort }
+const mainSearchByType = async (searchType, query, otherParams) => {
+  const body = { q: `* ${query} ${categoryParam}`, ...otherParams }
   const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
-
+  
   const request = {
     ...baseRequest,
     body: JSON.stringify(body),
@@ -36,98 +35,63 @@ const searchPostByTags = async (req, res) => {
   const data = await fetch(searchUrl, request)
   const dataJSON = await data.json()
 
-
   console.log({
-    type: 'tags',
+    type: searchType,
     stats: {
       took: dataJSON.took,
       hits: dataJSON.hits,
+      count: dataJSON.results ? dataJSON.results.length : 0,
+      scroll_id: dataJSON.scroll_id ? dataJSON.scroll_id : null
     },
     message: dataJSON.message,
   })
 
-  res.json(dataJSON)
+  return dataJSON;
+}
+
+const searchPostByTags = async (req, res) => {
+  const tag = req.body.tag
+  const sort = req.body.sort || searchSort
+  const scroll_id = req.body.scroll_id || ''
+  const otherParams = { sort: sort, scroll_id: scroll_id }
+  const q = `tag:${tag}`;
+
+  const result = await mainSearchByType('tags',q, otherParams);
+  return res.json(result); 
 }
 
 const searchPostByAuthor = async (req, res) => {
   const author = req.body.author
-  const body = { q: `* author:${author} ${categoryParam}`, ...searchSort }
-  const apiKey = searchApiKey
-  baseRequest.headers.Authorization = apiKey
+  const sort = req.body.sort || searchSort
+  const scroll_id = req.body.scroll_id || ''
+  const otherParams = { sort: sort, scroll_id: scroll_id }
+  const q = `author:${author}`;
 
-  const request = {
-    ...baseRequest,
-    body: JSON.stringify(body),
-  }
-
-  const data = await fetch(searchUrl, request)
-  const dataJSON = await data.json()
-
-  console.log({
-    type: 'author',
-    stats: {
-      took: dataJSON.took,
-      hits: dataJSON.hits,
-    },
-    message: dataJSON.message,
-  })
-
-  res.json(dataJSON)
+  const result = await mainSearchByType('author',q, otherParams);
+  return res.json(result); 
 }
 
 const searchPostByQueryString = async (req, res) => {
   const query = req.body.query
-  const body = { q: `${query} ${categoryParam}`, ...searchSort }
-  const apiKey = searchApiKey
-  baseRequest.headers.Authorization = apiKey
-  const request = {
-    ...baseRequest,
-    body: JSON.stringify(body),
-  }
+  const sort = req.body.sort || searchSort
+  const scroll_id = req.body.scroll_id || ''
+  const otherParams = { sort: sort, scroll_id: scroll_id }
+  const q = `${query}`;
 
-  const data = await fetch(searchUrl, request)
-  const dataJSON = await data.json()
-
-  console.log({
-    type: 'general',
-    stats: {
-      took: dataJSON.took,
-      hits: dataJSON.hits,
-    },
-    message: dataJSON.message,
-  })
-  
-  res.json(dataJSON)
+  const result = await mainSearchByType('general',q, otherParams);
+  return res.json(result); 
 }
 
 
 const searchAccountReplies = async (req, res) => {
-
-  console.log({ body: req.body })
-
   const account = req.body.account
-  const body = { q: `* author:${account} ${categoryParam}`, ...searchSort, type: 'comment' }
-  const apiKey = searchApiKey
-  baseRequest.headers.Authorization = apiKey
+  const sort = req.body.sort || searchSort
+  const scroll_id = req.body.scroll_id || ''
+  const otherParams = { sort: sort, scroll_id: scroll_id }
+  const q = `author:${account} type:comment`;
 
-  const request = {
-    ...baseRequest,
-    body: JSON.stringify(body),
-  }
-
-  const data = await fetch(searchUrl, request)
-  const dataJSON = await data.json()
-
-  console.log({
-    type: 'replies',
-    stats: {
-      took: dataJSON.took,
-      hits: dataJSON.hits,
-    },
-    message: dataJSON.message,
-  })
-  
-  res.json(dataJSON)
+  const result = await mainSearchByType('replies',q, otherParams);
+  return res.json(result); 
 }
 
 module.exports = { 
