@@ -1,6 +1,6 @@
 const searchUrl = 'https://api.hivesearcher.com/search'
 const categoryParam = 'category:hive-193084'
-const searchSort = { sort: "popularity" }
+const searchSort = { sort: "newest" }
 const searchApiKey = 'A2VZE4DZLUIOYTLADYXIDHZAOR3PSIKUXDUMKPBUTBM8ZIWJOVZXC23CMM4C'
 const fetch = require('node-fetch')
 
@@ -12,10 +12,6 @@ let baseRequest = {
     'mode': 'no-cors',
     'cache': 'no-cache',
   },
-}
-
-const randomIndex = (minimum, maximum) => {
-  return Math.round( Math.random() * (maximum - minimum) + minimum);
 }
 
 const searchPostByTags = async (req, res) => {
