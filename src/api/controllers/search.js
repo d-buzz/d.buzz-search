@@ -16,7 +16,8 @@ let baseRequest = {
 
 const searchPostByTags = async (req, res) => {
   const tag = req.body.tag
-  const body = { q: `* tag:${tag} ${categoryParam}`, ...searchSort }
+  const sort = { sort: req.body?.sort || 'newest' }
+  const body = { q: `* tag:${tag} ${categoryParam}`, ...sort }
   const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
 
