@@ -1,6 +1,6 @@
-const searchUrl = 'https://api.hivesearcher.com/search'[A
+const searchUrl = 'https://api.hivesearcher.com/search'
 const categoryParam = 'category:hive-193084'
-const searchSort = { sort: "newest" }
+const searchSort = "newest"
 const searchApiKey = 'DRHJ6EFF0W8UBDQNEENAXWCDUPJSZIXXYTGB1JYWWZQ3RF8G1QRFOZ6SFUCK'
 const fetch = require('node-fetch')
 
