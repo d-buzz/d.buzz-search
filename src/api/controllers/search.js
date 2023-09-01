@@ -1,7 +1,7 @@
-const searchUrl = 'https://api.hivesearcher.com/search'
+const searchUrl = 'https://api.hivesearcher.com/search'[A
 const categoryParam = 'category:hive-193084'
 const searchSort = { sort: "newest" }
-const searchApiKey = 'A2VZE4DZLUIOYTLADYXIDHZAOR3PSIKUXDUMKPBUTBM8ZIWJOVZXC23CMM4C'
+const searchApiKey = 'DRHJ6EFF0W8UBDQNEENAXWCDUPJSZIXXYTGB1JYWWZQ3RF8G1QRFOZ6SFUCK'
 const fetch = require('node-fetch')
 
 let baseRequest = {
@@ -16,7 +16,7 @@ let baseRequest = {
 
 const searchPostByTags = async (req, res) => {
   const tag = req.body.tag
-  const sort = { sort: req.body?.sort || 'newest' }
+  const sort = { sort: req.body?.sort || searchSort }
   const body = { q: `* tag:${tag} ${categoryParam}`, ...sort }
   const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
@@ -34,7 +34,8 @@ const searchPostByTags = async (req, res) => {
 
 const searchPostByAuthor = async (req, res) => {
   const author = req.body.author
-  const body = { q: `* author:${author} ${categoryParam}`, ...searchSort }
+  const sort = { sort: req.body?.sort || searchSort }
+  const body = { q: `* author:${author} ${categoryParam}`, ...sort }
   const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
 
@@ -51,7 +52,8 @@ const searchPostByAuthor = async (req, res) => {
 
 const searchPostByQueryString = async (req, res) => {
   const query = req.body.query
-  const body = { q: `${query} ${categoryParam}`, ...searchSort }
+  const sort = { sort: req.body?.sort || searchSort }
+  const body = { q: `${query} ${categoryParam}`, ...sort }
   const apiKey = searchApiKey
   baseRequest.headers.Authorization = apiKey
   const request = {
